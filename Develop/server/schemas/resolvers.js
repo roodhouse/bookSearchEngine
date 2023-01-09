@@ -18,8 +18,12 @@ const resolvers = {
         },
         saveBook: async (parent, args, context) => {
             const book = await User.findOneAndUpdate({_id: context.user._id}, {$push: {savedBooks: args}});
-            // left off here
+            return book;
         },
+        removeBook: async (parent, args, context) => {
+            const bookCut = await Book.remove({_id: context.bookId}, true)
+            return;
+        }
     },
 };
 
