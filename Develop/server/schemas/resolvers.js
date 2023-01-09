@@ -1,19 +1,24 @@
 const { Book, User } = require('../models');
+import {signToken} from '../utils/auth';  
 
 const resolvers = {
     Query: {
-        book: async () => {
-            return Book.find({});
-        },
-        users: async (parent, { _id}) => {
-            const params = _id ? { _id } : {};
-            return User.find(params);
+        me: async (parent, args, context) => {
+            if(context.user) {
+                const newUser = await User.findOne({_id : context.user._id})
+                return newUser;
+            }
         },
     },
     Mutation: {
-        createUser: async (parent, args) => {
+        addUser: async (parent, args) => {
             const user = await User.create(args);
-            return user;
+            const token = signToken(user)
+            return { user, token };
+        },
+        saveBook: async (parent, args, context) => {
+            const book = await User.findOneAndUpdate({_id: context.user._id}, {$push: {savedBooks: args}});
+            // left off here
         },
     },
 };
