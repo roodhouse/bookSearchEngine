@@ -37,4 +37,3 @@ db.once('open', () => {
 });
 
 startApolloServer(typeDefs, resolvers);
-// * `server.js`: Implement the Apollo Server and apply it to the Express server as middleware.
